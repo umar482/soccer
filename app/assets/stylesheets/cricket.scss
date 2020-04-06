@@ -1,0 +1,33 @@
+// Place all the styles related to the Cricket controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+#header{
+  background-color: #326295;
+}
+#footer{
+  background-color: #326295;
+}
+
+.slide-up-animate{
+  animation: Slide_Up 1s ease;
+}
+
+#game-list{
+  max-height: 78vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.team-logo{
+  object-fit: contain;
+}
+
+@keyframes Slide_Up{
+  0%{
+    transform: translateY(250px);
+  }
+  100%{
+    transform: translateY(0px);
+  }
+}

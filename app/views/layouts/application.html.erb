@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fifa - 2020</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= favicon_link_tag asset_path('favicon.ico') %>
+  </head>
+
+  <body>
+    <div data-behavior="vue">
+      <masthead></masthead>
+      <div class="container-fluid body-wrapper">
+        <%= yield %>
+      </div>
+      <foot></foot>
+    </div>
+  </body>
+</html>

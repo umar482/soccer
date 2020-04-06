@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  home_team_name: MyString
+  awaw_team_name: MyString
+  date: 2020-04-03 15:10:59
+  reach: 1
+  channel: MyString
+  league: MyString
+  price_per_minute: 1
+  minutes_bought: 1
+  home_team_logo: MyString
+  away_team_logo: MyString
+
+two:
+  home_team_name: MyString
+  awaw_team_name: MyString
+  date: 2020-04-03 15:10:59
+  reach: 1
+  channel: MyString
+  league: MyString
+  price_per_minute: 1
+  minutes_bought: 1
+  home_team_logo: MyString
+  away_team_logo: MyString
