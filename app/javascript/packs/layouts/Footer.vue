@@ -2,14 +2,15 @@
   <footer id="footer" class="text-white fixed-bottom p-3">
     <div class="d-flex justify-content-center">
       <form class="form-inline" @submit="addMinutes">
-        <h5 id="add-minutes-text" class="mr-4">add minutes to campaign</h5>
-        <button id="add-minutes" type="submit" class="btn rounded-0">Proceed to Checkout</button>
+        <h5 id="add-minutes-text" class="mr-4">Add minutes to campaign</h5>
+        <button id="add-minutes" type="submit" class="btn btn-light rounded-0">Proceed to Checkout</button>
       </form>
     </div>
   </footer>
 </template>
 
 <script>
+import Dom from '../../src/dom/manipulator.js'
 
 export default {
   name: 'Footer',
@@ -18,9 +19,7 @@ export default {
   },
   methods: {
     connect() {
-      var checkoutBtn = document.getElementById('add-minutes');
-      checkoutBtn.classList.add('disabled');
-      checkoutBtn.disabled = true;
+      Dom.disable(document.getElementById('add-minutes'))
     },
     addMinutes(e) {
       e.preventDefault();

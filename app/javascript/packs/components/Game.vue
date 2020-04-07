@@ -31,9 +31,13 @@
       </div>
       <div class="minutes-booked col-lg-2 text-center">
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button @click="subtractMinutes" type="button" class="btn px-3" :value="game.id">&#9207;</button>
+          <button @click="subtractMinutes" type="button" class="btn px-3" :value="game.id">
+            <i class="fas fa-angle-down"></i>
+          </button>
           <button id="minutes-bought" type="button" class="btn px-3">{{game.minutes_bought}}</button>
-          <button @click="addMinutes" type="button" class="btn btn-secondary px-3" :value="game.id">&#9206;</button>
+          <button @click="addMinutes" type="button" class="btn btn-secondary px-3" :value="game.id">
+            <i class="fas fa-angle-up"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -43,77 +47,64 @@
 <script>
 import moment from 'moment'
 import axios from 'axios'
+import Dom from '../../src/dom/manipulator.js'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Game',
   props: ['game'],
   methods: {
+    ...mapActions(['updateGame']),
     formattedDate(date) {
       return moment(date).format('hh:mm MM-DD-YYYY') 
     },
     addMinutes(event) {
-
-      var minutes = event.currentTarget.previousElementSibling;
-      minutes.innerHTML = ""+(parseInt(minutes.innerHTML)+1);
-      axios({
-        method: 'PUT',
-        headers: { 'X-CSRF-Token': document.getElementsByName("csrf-token")[0].content },
-        data: {minutes_bought: minutes.innerHTML},
-        url: "/game/"+event.currentTarget.value+".json"
-      })
-      .then( response => {
-        this.animate();
-        this.enableCheckoutBtn();
-        document.getElementById('add-minutes-text').innerHTML = this.totalMinutes()+" minutes added to campaign";
-      })
-      .catch( err => {
-        console.log(error)
-      })
-    },
-    subtractMinutes() {
-      var minutes = event.currentTarget.nextElementSibling;
-      if(minutes.innerHTML > 0){
-        minutes.innerHTML = ""+(parseInt(minutes.innerHTML)-1)
-        
-        axios({
-          method: 'PUT',
-          headers: { 'X-CSRF-Token': document.getElementsByName("csrf-token")[0].content },
-          data: {minutes_bought: minutes.innerHTML},
-          url: "/game/"+event.currentTarget.value+".json"
-        })
-        .then( response => {
-          this.disableCheckoutBtn();
-          var footer = document.getElementById('footer');
-          if(this.totalMinutes() === 0){
-            footer.classList.remove('slide-up-animate');
-          }
-          document.getElementById('add-minutes-text').innerHTML = "add minutes to campaign"
-        })
-        .catch( err => {
-          console.log(error)
-        })
+      if(this.totalMinutes() === 0) {
+        this.animate()
       }
+      var minutes = event.currentTarget.previousElementSibling
+      Dom.html(minutes, parseInt(minutes.innerHTML)+1)
+      Dom.enable(document.getElementById('add-minutes'))
+      Dom.html(document.getElementById('add-minutes-text'), `${this.totalMinutes()} minutes added to campaign`)
+      this.updatedGame(parseInt(minutes.innerHTML))
+    },
+    subtractMinutes(event) {
+      var minutes = event.currentTarget.nextElementSibling
+      if(minutes.innerHTML > 0){
+        Dom.html(minutes, parseInt(minutes.innerHTML)-1)
+        Dom.disable(document.getElementById('add-minutes'))
+        if(this.totalMinutes() === 0){
+          Dom.removeClass(document.getElementById('footer'), 'slide-up-animate')
+        }
+        Dom.html(document.getElementById('add-minutes-text'), "Add minutes to campaign")
+        this.updatedGame(parseInt(minutes.innerHTML))
+      }
+    },
+    updatedGame(minutes){
+      const Game = {
+        id: this.game.id,
+        home_team_name: this.game.home_team_name,
+        away_team_name: this.game.away_team_name,
+        data: this.game.data,
+        reach: this.game.reach,
+        channel: this.game.channel,
+        league: this.game.league,
+        price_per_minute: this.game.price_per_minute,
+        minutes_bought: minutes,
+        home_team_logo: this.game.home_team_logo,
+        away_team_logo: this.game.away_team_logo
+      }
+      this.updateGame(Game)
     },
     totalMinutes(){
       var totalMinutes = 0
       document.querySelectorAll('#minutes-bought').forEach(function(event){
-        totalMinutes += parseInt(event.innerHTML);
-      });
-      return totalMinutes;
+        totalMinutes += parseInt(event.innerHTML)
+      })
+      return totalMinutes
     },
     animate(){
-      var footer = document.getElementById('footer');
-      footer.classList.add('slide-up-animate');
-    },
-    enableCheckoutBtn(){
-      var checkoutBtn = document.getElementById('add-minutes');
-      checkoutBtn.classList.remove('disabled');
-      checkoutBtn.disabled = false;
-    },
-    disableCheckoutBtn(){
-      var checkoutBtn = document.getElementById('add-minutes');
-      checkoutBtn.classList.add('disabled');
-      checkoutBtn.disabled = true;
+      Dom.addClass(document.getElementById('footer'), 'slide-up-animate')
     }
   }
 }

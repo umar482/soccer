@@ -20,19 +20,21 @@ require("channels")
 // const imagePath = (name) => images(name, true)
 
 import TurbolinksAdapter from 'vue-turbolinks'
-import Vue from 'vue/dist/vue.esm'
 import App from '../app.vue'
 import GameList from './components/GameList.vue'
 import Header from './layouts/Header.vue'
 import Footer from './layouts/Footer.vue'
+import store from './store'
 
 Vue.use(TurbolinksAdapter)
+
 Vue.component('game-list',GameList)
 Vue.component('masthead',Header)
 Vue.component('foot',Footer)
 
 document.addEventListener('turbolinks:load', () => {
   const app = new Vue({
+    store: store,
     el: '[data-behavior="vue"]'
   })
 })
