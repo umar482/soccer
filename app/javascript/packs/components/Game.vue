@@ -1,4 +1,5 @@
 <template>
+  <div id="game">
     <div :id="'game'+game.id" class="row d-flex align-items-center border-bottom px-2 py-4 bg-light game">
       <div class="logo col-lg-2 text-center">
         <img class="team-logo m-2" :src="require('../../../assets/images/'+game.home_team_logo)" width="50" height="50" alt="">
